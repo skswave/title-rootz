@@ -22,7 +22,7 @@ import { findNearestSchools, findBuildingPermits, findNearestHospitals, findNear
 import { assembleTimeshareIntelligence, searchDBPRTimeshare } from './query/fl-timeshare.js';
 import { assembleOhioPropertyIntelligence, lookupOhioByAddress } from './query/oh-property.js';
 import { computeFarmingScore } from './scoring/farming-score.js';
-import { exportCSV } from './export/csv.js';
+import { farmingToCSV } from './export/csv.js';
 import { renderBridgePage } from './export/bridge-page.js';
 import { handleFarmChat } from './ai/chat-handler.js';
 import { renderFarmChatPage } from './templates/farm-chat.js';
@@ -207,7 +207,10 @@ async function handleRequest(req, res) {
       const format = params.get('format');
       if (!address) return json(res, { error: 'address parameter required' }, 400);
       const data = await assemblePropertyIntelligence(address, city);
-      if (format === 'csv') return exportCSV(res, [data]);
+      if (format === 'csv') {
+        res.writeHead(200, { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="property.csv"' });
+        return res.end(farmingToCSV([data]));
+      }
       return json(res, data);
     }
 
@@ -231,7 +234,11 @@ async function handleRequest(req, res) {
       const format = params.get('format');
       if (!city && !zip) return json(res, { error: 'city or zip parameter required' }, 400);
       const results = farmingSearch({ city, zip, signals, limit, minScore });
-      if (format === 'csv') return exportCSV(res, results.properties || results);
+      if (format === 'csv') {
+        const csvData = results.prospects || results.properties || results;
+        res.writeHead(200, { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="farming.csv"' });
+        return res.end(farmingToCSV(csvData));
+      }
       return json(res, results);
     }
 
