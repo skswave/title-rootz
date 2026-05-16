@@ -224,12 +224,13 @@ async function handleRequest(req, res) {
 
     if (path_ === '/api/fl/farm' && method === 'GET') {
       const city = params.get('city');
+      const zip = params.get('zip');
       const signals = params.get('signals')?.split(',').filter(Boolean) || [];
       const limit = parseInt(params.get('limit') || '50');
       const minScore = parseInt(params.get('minScore') || '0');
       const format = params.get('format');
-      if (!city) return json(res, { error: 'city parameter required' }, 400);
-      const results = farmingSearch({ city, signals, limit, minScore });
+      if (!city && !zip) return json(res, { error: 'city or zip parameter required' }, 400);
+      const results = farmingSearch({ city, zip, signals, limit, minScore });
       if (format === 'csv') return exportCSV(res, results.properties || results);
       return json(res, results);
     }

@@ -25,7 +25,7 @@ const JWT_SECRET = new TextEncoder().encode(
 const SESSION_TTL_DAYS = 30;
 
 export const TIER_LIMITS = {
-  free:      { daily: 5,    monthly_tokens: 50_000,    model: 'claude-haiku-4-5-20251001', court_records: false, mailing_addr: false, bridge_links: false, resume_sessions: false },
+  free:      { daily: 15,   monthly_tokens: 50_000,    model: 'claude-haiku-4-5-20251001', court_records: false, mailing_addr: false, bridge_links: false, resume_sessions: false },
   starter:   { daily: 50,   monthly_tokens: 500_000,   model: 'claude-haiku-4-5-20251001', court_records: false, mailing_addr: true,  bridge_links: true,  resume_sessions: false },
   pro:       { daily: 200,  monthly_tokens: 1_000_000, model: 'claude-sonnet-4-20250514',  court_records: true,  mailing_addr: true,  bridge_links: true,  resume_sessions: true  },
   unlimited: { daily: -1,   monthly_tokens: 5_000_000, model: 'claude-sonnet-4-20250514',  court_records: true,  mailing_addr: true,  bridge_links: true,  resume_sessions: true  },

@@ -18,12 +18,27 @@ import path from 'path';
 import { CITIES_DIR } from '../lib/config.js';
 import { getClerkDb, _clerkStmts } from './fl-clerk.js';
 
-export function farmingSearch({ city, lat, lng, radius = 1.0, signals = [], limit = 50, minScore = 0 }) {
-  const cityUp = (city || '').toUpperCase().replace(/ /g, '_').replace(/[^A-Z0-9_]/g, '');
-  const cityFile = path.join(CITIES_DIR, `${cityUp}.jsonl`);
+export function farmingSearch({ city, zip, lat, lng, radius = 1.0, signals = [], limit = 50, minScore = 0 }) {
+  // ZIP code search — find matching city file(s) and filter by ZIP
+  const filterZip = zip ? String(zip).trim() : '';
+
+  let cityUp, cityFile;
+  if (filterZip && !city) {
+    // Search all city files for properties in this ZIP
+    const files = fs.readdirSync(CITIES_DIR).filter(f => f.endsWith('.jsonl'));
+    const matchedFile = findCityFileByZip(filterZip, files);
+    if (!matchedFile) {
+      return { error: `No properties found for ZIP ${filterZip}`, hint: 'Try providing a city name along with the ZIP' };
+    }
+    cityUp = matchedFile.replace('.jsonl', '');
+    cityFile = path.join(CITIES_DIR, matchedFile);
+  } else {
+    cityUp = (city || '').toUpperCase().replace(/ /g, '_').replace(/[^A-Z0-9_]/g, '');
+    cityFile = path.join(CITIES_DIR, `${cityUp}.jsonl`);
+  }
 
   if (!cityUp || !fs.existsSync(cityFile)) {
-    return { error: `City not found: ${city}`, availableCities: 'Use /api/fl/farm?list=cities for available cities' };
+    return { error: `City not found: ${city || zip}`, availableCities: 'Use /api/fl/farm?list=cities for available cities' };
   }
 
   const RESIDENTIAL = new Set(['000', '001', '002', '003', '004', '005', '006', '007', '008', '009']);
@@ -42,6 +57,9 @@ export function farmingSearch({ city, lat, lng, radius = 1.0, signals = [], limi
 
     const dor = String(p.DOR_UC || '').trim();
     if (!RESIDENTIAL.has(dor)) continue;
+
+    // ZIP filter
+    if (filterZip && String(p.PHY_ZIPCD || '').trim().slice(0, 5) !== filterZip) continue;
 
     const name = (p.OWN_NAME || '').toUpperCase();
     if (EXCLUDE.some(e => name.includes(e))) continue;
@@ -188,4 +206,35 @@ export function farmingSearch({ city, lat, lng, radius = 1.0, signals = [], limi
       provenance: 'Government source data with cryptographic hashing'
     }
   };
+}
+
+// ZIP lookup — scan first 100 lines of random city files to find which city contains this ZIP
+function findCityFileByZip(zip, files) {
+  // Common FL ZIP-to-city mappings for speed
+  const ZIP_HINTS = {
+    '33': ['FORT_LAUDERDALE', 'MIAMI', 'MIAMI_BEACH', 'HOLLYWOOD', 'CORAL_SPRINGS', 'PEMBROKE_PINES', 'POMPANO_BEACH', 'BOCA_RATON', 'DEERFIELD_BEACH', 'PLANTATION'],
+    '34': ['ORLANDO', 'TAMPA', 'CLEARWATER', 'ST_PETERSBURG', 'LAKELAND', 'OCALA', 'PORT_CHARLOTTE'],
+    '32': ['JACKSONVILLE', 'GAINESVILLE', 'TALLAHASSEE', 'DAYTONA_BEACH', 'ORLANDO'],
+  };
+
+  const prefix = zip.slice(0, 2);
+  const hints = ZIP_HINTS[prefix] || [];
+
+  // Check hint cities first
+  for (const hint of hints) {
+    const file = `${hint}.jsonl`;
+    if (!files.includes(file)) continue;
+    const filePath = path.join(CITIES_DIR, file);
+    const sample = fs.readFileSync(filePath, 'utf-8').slice(0, 50000);
+    if (sample.includes(`"PHY_ZIPCD":"${zip}"`)) return file;
+  }
+
+  // Brute force — check up to 20 files
+  for (const file of files.slice(0, 20)) {
+    const filePath = path.join(CITIES_DIR, file);
+    const sample = fs.readFileSync(filePath, 'utf-8').slice(0, 50000);
+    if (sample.includes(`"PHY_ZIPCD":"${zip}"`)) return file;
+  }
+
+  return null;
 }

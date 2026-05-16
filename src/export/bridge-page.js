@@ -55,8 +55,10 @@ async function fetchBCPAPhotos(folio) {
   if (!folio || folio.length < 10) return [];
   try {
     const resp = await fetch(`https://bcpa.net/Photographs.asp?Folio=${folio}`, {
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(3000),
+      headers: { 'User-Agent': 'Rootz Property Intelligence/2.0' }
     });
+    if (!resp.ok) return [];
     const html = await resp.text();
     const matches = [...html.matchAll(/src='(\/Photographs\/[^']+\.jpg)'/g)];
     return matches.map(m => {
