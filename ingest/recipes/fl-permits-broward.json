@@ -1,0 +1,27 @@
+{
+  "id": "fl-permits-broward",
+  "name": "Broward County Building Permits",
+  "transport": "arcgis",
+  "source": {
+    "endpoint": "https://services1.arcgis.com/TjSxJMXrGMcYoH0h/arcgis/rest/services/Building_Permits/FeatureServer/0",
+    "pagination": { "method": "offset", "batchSize": 2000, "delay": 300 }
+  },
+  "transform": "permit-record",
+  "fieldMapping": {
+    "permitNumber": "PERMIT_NUMBER",
+    "address": "ADDRESS",
+    "type": "PERMIT_TYPE",
+    "description": "DESCRIPTION",
+    "status": "STATUS",
+    "estimatedValue": "ESTIMATED_VALUE",
+    "contractor": "CONTRACTOR_NAME",
+    "issueDate": { "field": "ISSUE_DATE", "format": "epoch_ms" },
+    "city": "CITY",
+    "county": "broward"
+  },
+  "loader": "jsonl-city-index",
+  "output": "data/florida/permits/broward.jsonl",
+  "schedule": "0 4 * * 1",
+  "lastRun": null,
+  "recordCount": null
+}
