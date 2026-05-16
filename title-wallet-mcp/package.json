@@ -1,0 +1,12 @@
+{
+  "name": "title-wallet-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Origin Title Wallet — AI-driven closing management",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "private": true
+}

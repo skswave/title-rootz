@@ -1,0 +1,386 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rootz Property Intelligence",
+    "description": "AI-powered real estate farming and property intelligence for Florida. 10.8M parcels across all 67 counties, courthouse records (litigation pending, probate, liens), FEMA flood zones, schools, demographics, building permits, and owner intelligence — all with cryptographic provenance from government sources.",
+    "version": "0.5.0",
+    "contact": {
+      "name": "Rootz Corp",
+      "email": "steven@rootz.global",
+      "url": "https://rootz.global"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://title.rootz.global",
+      "description": "Production API"
+    }
+  ],
+  "paths": {
+    "/api/fl/search": {
+      "get": {
+        "operationId": "searchProperty",
+        "summary": "Full Property Intelligence Package — Single address deep-dive",
+        "description": "Full property intelligence for any FL address. Returns owner, value, farming score, court records, flood zone, schools, permits, demographics. Use /api/fl/farm for area searches.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "Street address (use + for spaces). Example: 179+Harbor+Dr",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "description": "City name. Works for any FL city: Fort Lauderdale, Coral Springs, Hollywood, Miami, Orlando, Tampa, Jacksonville, etc.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complete property intelligence package",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "origin": {
+                      "type": "object",
+                      "description": "Provenance metadata including confidence score, document hash, and SSL certificates"
+                    },
+                    "property": {
+                      "type": "object",
+                      "description": "Property details: address, owner, building specs, lot, classification"
+                    },
+                    "flood": {
+                      "type": "object",
+                      "description": "FEMA flood zone, base flood elevation, insurance requirement"
+                    },
+                    "demographics": {
+                      "type": "object",
+                      "description": "Census block group demographics: income, population, home values, owner-occupancy"
+                    },
+                    "schools": {
+                      "type": "object",
+                      "description": "Nearest public, private, and charter schools with enrollment and capacity"
+                    },
+                    "buildingPermits": {
+                      "type": "object",
+                      "description": "Building permit history with contractor names and work descriptions"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fl/lookup": {
+      "get": {
+        "operationId": "lookupProperty",
+        "summary": "Quick Property Lookup",
+        "description": "Fast lookup from Miami-Dade County GIS. Returns property details for any of 936,739 properties.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "description": "Street address",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "description": "City name",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "folio",
+            "in": "query",
+            "description": "13-digit Miami-Dade folio number",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property details from county GIS"
+          }
+        }
+      }
+    },
+    "/api/fl/flood": {
+      "get": {
+        "operationId": "checkFloodZone",
+        "summary": "FEMA Flood Zone Check",
+        "description": "Query FEMA flood zones by coordinates. Works nationwide.",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "description": "Latitude",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": true,
+            "description": "Longitude",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flood zone, base flood elevation, insurance requirement"
+          }
+        }
+      }
+    },
+    "/api/fl/schools": {
+      "get": {
+        "operationId": "findSchools",
+        "summary": "Nearest Schools",
+        "description": "Find public, private, and charter schools near any Miami-Dade coordinates.",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "description": "Search radius in miles (default 3)",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nearest schools with enrollment, capacity, and distance"
+          }
+        }
+      }
+    },
+    "/api/fl/permits": {
+      "get": {
+        "operationId": "searchPermits",
+        "summary": "Building Permits",
+        "description": "Search 481,950 building permits by folio number or address.",
+        "parameters": [
+          {
+            "name": "folio",
+            "in": "query",
+            "description": "Property folio number",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "description": "Street address to search",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Building permits with type, contractor, dates, and estimated value"
+          }
+        }
+      }
+    },
+    "/api/fl/census": {
+      "get": {
+        "operationId": "getCensus",
+        "summary": "Census Demographics",
+        "description": "Block-group level demographics for any US address.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Population, income, home values, owner-occupancy, median age"
+          }
+        }
+      }
+    },
+    "/api/party": {
+      "get": {
+        "operationId": "searchParty",
+        "summary": "Cross-Property Person Search",
+        "description": "Search for a person or entity across all Massachusetts properties. Finds name variants and all document appearances.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "description": "Person or entity name to search",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All properties and documents where this name appears"
+          }
+        }
+      }
+    },
+    "/api/fraud": {
+      "get": {
+        "operationId": "detectFraud",
+        "summary": "Fraud Pattern Detection",
+        "description": "Automated fraud risk scoring for Massachusetts properties. Checks for orphan deeds, rapid transfers, financial distress, and more.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "town",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Risk level, flag count, specific warnings"
+          }
+        }
+      }
+    },
+    "/api/fl/cross-ref/entity": {
+      "get": {
+        "operationId": "crossRefEntity",
+        "summary": "JOIN: Property Owner → FL Business Registry (LLC Unmasking)",
+        "description": "Unmask LLC/Corp owners via FL Sunbiz. Returns officers, filing dates, succession signals. Provide owner name, address, or folio.",
+        "parameters": [
+          { "name": "owner", "in": "query", "description": "Entity name to look up (e.g., SEASIDE HOLDINGS LLC)", "schema": { "type": "string" } },
+          { "name": "address", "in": "query", "description": "Property street address — will extract owner from property record", "schema": { "type": "string" } },
+          { "name": "city", "in": "query", "description": "City for address lookup", "schema": { "type": "string" } },
+          { "name": "folio", "in": "query", "description": "Miami-Dade folio number", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Property owner resolved to business entity with officers, filing history, and succession signals" }
+        }
+      }
+    },
+    "/api/fl/cross-ref/public": {
+      "get": {
+        "operationId": "crossRefPublic",
+        "summary": "JOIN: Property Owner → SEC Public Companies (Institutional Detection)",
+        "description": "Cross-references a Florida property owner against SEC-registered public companies via origin.rootz.global. Identifies REITs, institutional investors, and public company subsidiaries that own Florida real estate. Provide an address, folio, or direct owner name.",
+        "parameters": [
+          { "name": "owner", "in": "query", "description": "Owner name to check (e.g., INVITATION HOMES)", "schema": { "type": "string" } },
+          { "name": "address", "in": "query", "description": "Property street address", "schema": { "type": "string" } },
+          { "name": "city", "in": "query", "description": "City for address lookup", "schema": { "type": "string" } },
+          { "name": "folio", "in": "query", "description": "Miami-Dade folio number", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Public company matches with ticker, sector, REIT detection" }
+        }
+      }
+    },
+    "/api/fl/farm": {
+      "get": {
+        "operationId": "farmingSearch",
+        "summary": "Farming Prospect Search — Find motivated sellers by city and signal type",
+        "description": "Find farming prospects in any FL city. Returns scored properties with court records, owner mailing addresses, equity, and bridge page URLs. Filter by signal type to match agent specialty.",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "description": "Florida city name (use + for spaces). Examples: FORT+LAUDERDALE, CORAL+SPRINGS, HOLLYWOOD, PEMBROKE+PINES, MIAMI, ORLANDO, TAMPA, JACKSONVILLE",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "signals",
+            "in": "query",
+            "description": "Comma-separated farming signals to filter by. Available: probate, lis_pendens (litigation pending/pre-foreclosure), lien, judgment (foreclosure), death, absentee, out_of_state, corporate, free_clear (mortgage paid off), no_homestead. Combine to match agent specialty: probate,death for estate specialists, absentee,out_of_state for investor property experts, lis_pendens,lien for distressed property agents.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum results to return (default 50, max 200)",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "minScore",
+            "in": "query",
+            "description": "Minimum farming score 0-100 (default 0). Use 40 for medium+ prospects, 70 for high-priority only.",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Farming prospects with scores, reasons, owner mailing addresses, sale history, equity estimates, court records, property details, and bridge page URLs for each property"
+          }
+        }
+      }
+    },
+    "/api/oh/search": {
+      "get": {
+        "operationId": "searchOhioProperty",
+        "summary": "Ohio Property Intelligence",
+        "description": "Property search for Ohio (Franklin, Hamilton, Cuyahoga counties — 1.2M parcels). Returns owner, value, sale history, and investor signals.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "Street address",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "description": "City name (e.g., Columbus, Cincinnati, Cleveland, Hilliard)",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Ohio property intelligence package" }
+        }
+      }
+    },
+    "/api/fl/cross-ref/owner-intel": {
+      "get": {
+        "operationId": "crossRefOwnerIntel",
+        "summary": "FULL OWNER INTELLIGENCE: Property + Private Registry + SEC Data",
+        "description": "Full owner intelligence: resolves LLCs to officers via Sunbiz + detects public companies/REITs via SEC. Provide owner name, address, or folio.",
+        "parameters": [
+          { "name": "owner", "in": "query", "description": "Owner name", "schema": { "type": "string" } },
+          { "name": "address", "in": "query", "description": "Property street address", "schema": { "type": "string" } },
+          { "name": "city", "in": "query", "description": "City for address lookup", "schema": { "type": "string" } },
+          { "name": "folio", "in": "query", "description": "Miami-Dade folio number", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Complete owner profile: entity type, officers, succession signals, institutional detection" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "wallet": {
+    "id": "MA-RICHMOND-111-SWAMP-RD",
+    "version": "1.0",
+    "created": "2026-04-24T12:05:36.318Z",
+    "lastUpdated": "2026-04-24T12:05:36.318Z",
+    "status": "active",
+    "trustLevel": 4,
+    "confidence": 0.87,
+    "eventCount": 1,
+    "merkleRoot": "dd60910f4410e181068e44bb7414dcb55ee46ae8e1f3e7e5ab1349a1b1c16cda",
+    "documentHashes": {
+      "deed": "cb04ced832216adcc2b7b94dda5bdf3276fe285b63e4a81e7dfe5cea4f6b8f45",
+      "chainOfTitle": "36a3796547259bf22b455942cfcb31e9f3632e6088296960c719613cb3b8cffb",
+      "titleSearch": "d5f437286c11f992878d8eb2998e26f100cf98d5adace30c58f5af6acf015aae",
+      "settlementBuyer": "793bd808a5ccd68057d4b2e7d88c423eba535cedd5fb12c7218911ea4f897ee9",
+      "settlementSeller": "b0872c9804aac56a8e1130ae3dc0a248637e9d3c6ebfafe0a61f36eba23ef21d",
+      "wireBuyer": "0afb2ccd1afbda66b99fe110b68fca7feb6c611f3a7f3f5cec1b9909865b3f59",
+      "wireSeller": "5ccfbc6ab286b50a046df98877e047739921e06871c97ed24bc599173af9a2a9",
+      "attestation": "10b4c62188c9a370a1a6c899ed7d1e01558a955cea3272ad6937d425b313f48b"
+    }
+  },
+  "property": {
+    "address": "111 Swamp Rd",
+    "town": "Richmond",
+    "state": "MA",
+    "county": "Berkshire",
+    "zip": "01254",
+    "currentOwner": "SPRAGUE STEVEN & JUDITH"
+  },
+  "transaction": {
+    "type": "sale",
+    "date": "2000-08-11",
+    "price": 274000,
+    "deedNumber": "549232",
+    "bookPage": "01760/119",
+    "registry": "Middle Berkshire"
+  },
+  "parties": {
+    "buyer": {
+      "name": "SPRAGUE STEVEN & JUDITH"
+    },
+    "seller": {
+      "name": "FOSTER JOHN E & MARY L"
+    },
+    "titleCompany": {
+      "name": "Berkshire Title Services",
+      "licenseNumber": "TI-2000-0456"
+    },
+    "attorney": {
+      "name": "Robert Anderson, Esq.",
+      "barNumber": "MA-34567"
+    },
+    "lender": {
+      "name": "Lenox National Bank"
+    }
+  },
+  "public": {
+    "deed": {
+      "type": "Quitclaim",
+      "docNum": "549232",
+      "grantors": [
+        "FOSTER JOHN E",
+        "FOSTER MARY L"
+      ],
+      "grantees": [
+        "SPRAGUE STEVEN",
+        "SPRAGUE JUDITH"
+      ],
+      "consideration": 274000
+    },
+    "chainOfTitle": [
+      {
+        "owner": "FOSTER JOHN E & MARY L",
+        "from": "1997-07-07",
+        "to": "2000-08-11",
+        "deedType": "Warranty Deed"
+      },
+      {
+        "owner": "HARRINGTON JAMES T",
+        "from": "1985-03-15",
+        "to": "1997-07-07",
+        "deedType": "Warranty Deed"
+      }
+    ],
+    "liens": {
+      "active": [
+        {
+          "type": "MORTGAGE",
+          "amount": 219200,
+          "lender": "Lenox National Bank",
+          "bookPage": "01760/122"
+        }
+      ],
+      "discharged": []
+    },
+    "attestation": {
+      "attorney": "Robert Anderson, Esq.",
+      "barNumber": "MA-34567",
+      "statement": "Title is clear and marketable.",
+      "date": "2000-08-11"
+    },
+    "confidenceScore": 0.87,
+    "confidenceDetail": {}
+  }
+}

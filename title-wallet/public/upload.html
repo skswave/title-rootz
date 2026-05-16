@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Closing — Origin Title Wallet</title>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #141828;
+      --surface2: #1c2240;
+      --border: #2a3050;
+      --text: #e0e4f0;
+      --muted: #8890a8;
+      --accent: #4a9eff;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 18px; font-weight: 600; }
+    header h1 span { color: var(--accent); }
+    header nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 13px;
+    }
+    header nav a:hover { color: var(--accent); }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 40px; }
+
+    h2 { font-size: 20px; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 30px; }
+
+    .form-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .form-section h3 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    input, textarea, select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .doc-section {
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .doc-section h4 {
+      font-size: 12px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .doc-section .optional {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: normal;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+      font-size: 14px;
+      padding: 14px;
+    }
+    .btn-primary:hover { background: #3d8bef; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .result {
+      background: var(--surface);
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 20px;
+      display: none;
+    }
+    .result h3 { color: var(--green); margin-bottom: 12px; }
+    .result pre {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .result.error { border-color: var(--red); }
+    .result.error h3 { color: var(--red); }
+
+    .share-links {
+      margin-top: 16px;
+    }
+    .share-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--bg);
+      border-radius: 4px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .share-link .role { color: var(--accent); font-weight: 600; text-transform: capitalize; }
+    .share-link code {
+      color: var(--muted);
+      font-size: 11px;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .mode-toggle button {
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .mode-toggle button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><span>Origin</span> Title Wallet</h1>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/upload" style="color: var(--accent)">Upload Closing</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Upload Closing Package</h2>
+    <p class="subtitle">Create a Title Wallet from a real estate closing. Fill in the form or paste JSON directly.</p>
+
+    <div class="mode-toggle">
+      <button class="active" onclick="setMode('form')">Form</button>
+      <button onclick="setMode('json')">Paste JSON</button>
+      <button onclick="setMode('demo')">Demo (111 Swamp Rd)</button>
+    </div>
+
+    <!-- JSON mode -->
+    <div id="json-mode" style="display:none">
+      <div class="form-section">
+        <h3>Closing Package JSON</h3>
+        <textarea id="json-input" rows="20" placeholder='Paste your closing package JSON here...'></textarea>
+      </div>
+    </div>
+
+    <!-- Form mode -->
+    <div id="form-mode">
+      <!-- Property -->
+      <div class="form-section">
+        <h3>Property</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" id="f-address" placeholder="111 Swamp Rd">
+          </div>
+          <div class="form-group">
+            <label>Town</label>
+            <input type="text" id="f-town" placeholder="Richmond">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="f-state" value="MA">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>County</label>
+            <input type="text" id="f-county" placeholder="Berkshire">
+          </div>
+          <div class="form-group">
+            <label>ZIP</label>
+            <input type="text" id="f-zip" placeholder="01254">
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction -->
+      <div class="form-section">
+        <h3>Transaction</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Type</label>
+            <select id="f-type">
+              <option value="sale">Sale</option>
+              <option value="refinance">Refinance</option>
+              <option value="transfer">Transfer</option>
+              <option value="estate">Estate</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Closing Date</label>
+            <input type="date" id="f-date">
+          </div>
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="f-price" placeholder="274000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Deed Number</label>
+            <input type="text" id="f-deed" placeholder="549232">
+          </div>
+          <div class="form-group">
+            <label>Book/Page</label>
+            <input type="text" id="f-bookpage" placeholder="01760/119">
+          </div>
+          <div class="form-group">
+            <label>Registry</label>
+            <input type="text" id="f-registry" placeholder="Middle Berkshire">
+          </div>
+        </div>
+      </div>
+
+      <!-- Parties -->
+      <div class="form-section">
+        <h3>Parties</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Buyer Name</label>
+            <input type="text" id="f-buyer" placeholder="SPRAGUE STEVEN & JUDITH">
+          </div>
+          <div class="form-group">
+            <label>Seller Name</label>
+            <input type="text" id="f-seller" placeholder="FOSTER JOHN E & MARY L">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Title Company</label>
+            <input type="text" id="f-titleco" placeholder="Berkshire Title Services">
+          </div>
+          <div class="form-group">
+            <label>License #</label>
+            <input type="text" id="f-license" placeholder="TI-12345">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Attorney</label>
+            <input type="text" id="f-attorney" placeholder="Jane Smith, Esq.">
+          </div>
+          <div class="form-group">
+            <label>Bar #</label>
+            <input type="text" id="f-bar" placeholder="MA-67890">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Lender</label>
+            <input type="text" id="f-lender" placeholder="Lenox National Bank">
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents -->
+      <div class="form-section">
+        <h3>Documents</h3>
+        <p style="font-size: 11px; color: var(--muted); margin-bottom: 12px;">
+          Enter document details as JSON objects. Deed and attestation are required. Others are optional.
+        </p>
+
+        <div class="doc-section">
+          <h4>Deed <span class="optional">(required)</span></h4>
+          <textarea id="f-doc-deed" placeholder='{"type": "Quitclaim", "grantors": ["FOSTER JOHN E"], "grantees": ["SPRAGUE STEVEN"], "consideration": 274000}'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Chain of Title <span class="optional">(array of prior deeds)</span></h4>
+          <textarea id="f-doc-chain" placeholder='[{"owner": "FOSTER JOHN E", "from": "1997-07-07", "to": "2000-08-11", "deed": "549200"}]'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Settlement — Buyer <span class="optional">(private, encrypted)</span></h4>
+          <textarea id="f-doc-settle-buyer" placeholder='{"purchasePrice": 274000, "downPayment": 54800, "loanAmount": 219200, "closingCosts": 8500}'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Settlement — Seller <span class="optional">(private, encrypted)</span></h4>
+          <textarea id="f-doc-settle-seller" placeholder='{"salePrice": 274000, "mortgagePayoff": 120000, "commissions": 16440, "netProceeds": 130000}'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Wire Instructions — Buyer <span class="optional">(private, encrypted)</span></h4>
+          <textarea id="f-doc-wire-buyer" placeholder='{"bank": "Lenox National Bank", "routing": "211870281", "account": "****4567", "amount": 63300}'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Wire Instructions — Seller <span class="optional">(private, encrypted)</span></h4>
+          <textarea id="f-doc-wire-seller" placeholder='{"bank": "Greylock Federal CU", "routing": "211871919", "account": "****8901", "amount": 130000}'></textarea>
+        </div>
+
+        <div class="doc-section">
+          <h4>Attorney Attestation <span class="optional">(required)</span></h4>
+          <textarea id="f-doc-attestation" placeholder='{"attorney": "Jane Smith", "barNumber": "MA-67890", "statement": "I have examined the title and certify...", "date": "2000-08-11"}'></textarea>
+        </div>
+      </div>
+
+      <!-- Confidence -->
+      <div class="form-section">
+        <h3>Confidence Score</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Score (0.0 - 1.0)</label>
+            <input type="number" id="f-confidence" step="0.01" min="0" max="1" placeholder="0.87">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="submit-btn" onclick="submitClosing()">
+      Create Title Wallet
+    </button>
+
+    <div id="result" class="result">
+      <h3 id="result-title">Wallet Created</h3>
+      <pre id="result-content"></pre>
+      <div class="share-links" id="share-links"></div>
+    </div>
+  </div>
+
+  <script>
+    let mode = 'form';
+
+    function setMode(m) {
+      mode = m;
+      document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.mode-toggle button:nth-child(${m === 'form' ? 1 : m === 'json' ? 2 : 3})`).classList.add('active');
+
+      document.getElementById('form-mode').style.display = m === 'form' ? 'block' : 'none';
+      document.getElementById('json-mode').style.display = m === 'json' ? 'block' : 'none';
+
+      if (m === 'demo') {
+        document.getElementById('form-mode').style.display = 'none';
+        document.getElementById('json-mode').style.display = 'block';
+        document.getElementById('json-input').value = JSON.stringify(DEMO_DATA, null, 2);
+      }
+    }
+
+    function parseJson(val) {
+      if (!val || !val.trim()) return null;
+      try { return JSON.parse(val); } catch { return null; }
+    }
+
+    function buildFromForm() {
+      const docs = {};
+      const deed = parseJson(document.getElementById('f-doc-deed').value);
+      if (deed) docs.deed = deed;
+      const chain = parseJson(document.getElementById('f-doc-chain').value);
+      if (chain) docs.chainOfTitle = chain;
+      const sb = parseJson(document.getElementById('f-doc-settle-buyer').value);
+      if (sb) docs.settlementBuyer = sb;
+      const ss = parseJson(document.getElementById('f-doc-settle-seller').value);
+      if (ss) docs.settlementSeller = ss;
+      const wb = parseJson(document.getElementById('f-doc-wire-buyer').value);
+      if (wb) docs.wireBuyer = wb;
+      const ws = parseJson(document.getElementById('f-doc-wire-seller').value);
+      if (ws) docs.wireSeller = ws;
+      const att = parseJson(document.getElementById('f-doc-attestation').value);
+      if (att) docs.attestation = att;
+
+      return {
+        property: {
+          address: document.getElementById('f-address').value,
+          town: document.getElementById('f-town').value,
+          state: document.getElementById('f-state').value || 'MA',
+          county: document.getElementById('f-county').value,
+          zip: document.getElementById('f-zip').value
+        },
+        transaction: {
+          type: document.getElementById('f-type').value,
+          date: document.getElementById('f-date').value,
+          price: Number(document.getElementById('f-price').value) || 0,
+          deedNumber: document.getElementById('f-deed').value,
+          bookPage: document.getElementById('f-bookpage').value,
+          registry: document.getElementById('f-registry').value
+        },
+        parties: {
+          buyer: { name: document.getElementById('f-buyer').value },
+          seller: { name: document.getElementById('f-seller').value },
+          titleCompany: {
+            name: document.getElementById('f-titleco').value,
+            licenseNumber: document.getElementById('f-license').value
+          },
+          attorney: {
+            name: document.getElementById('f-attorney').value,
+            barNumber: document.getElementById('f-bar').value
+          },
+          lender: { name: document.getElementById('f-lender').value }
+        },
+        documents: docs,
+        confidenceScore: Number(document.getElementById('f-confidence').value) || 0
+      };
+    }
+
+    async function submitClosing() {
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Creating wallet...';
+
+      let data;
+      if (mode === 'form') {
+        data = buildFromForm();
+      } else {
+        data = parseJson(document.getElementById('json-input').value);
+        if (!data) {
+          showResult('Invalid JSON', true);
+          btn.disabled = false;
+          btn.textContent = 'Create Title Wallet';
+          return;
+        }
+      }
+
+      try {
+        const resp = await fetch('/api/wallet/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await resp.json();
+
+        if (resp.ok) {
+          showResult(result, false);
+        } else {
+          showResult(result.error || 'Unknown error', true);
+        }
+      } catch (err) {
+        showResult(err.message, true);
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Create Title Wallet';
+    }
+
+    function showResult(data, isError) {
+      const el = document.getElementById('result');
+      el.style.display = 'block';
+      el.className = isError ? 'result error' : 'result';
+      document.getElementById('result-title').textContent = isError ? 'Error' : 'Wallet Created Successfully';
+
+      if (isError) {
+        document.getElementById('result-content').textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        document.getElementById('share-links').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('result-content').textContent = JSON.stringify({
+        propertyId: data.propertyId,
+        trustLevel: data.trustLevel,
+        confidence: data.confidence,
+        eventCount: data.eventCount,
+        documentCount: data.documentCount,
+        property: data.property,
+        transaction: data.transaction
+      }, null, 2);
+
+      if (data.shareLinks) {
+        const linksHtml = Object.entries(data.shareLinks).map(([role, key]) =>
+          `<div class="share-link">
+            <span class="role">${role}</span>
+            <code>/viewer?id=${encodeURIComponent(data.propertyId)}&key=${key}</code>
+          </div>`
+        ).join('');
+        document.getElementById('share-links').innerHTML =
+          '<h4 style="margin-bottom:8px; font-size:12px; color:var(--accent)">Share Links (distribute to each party):</h4>' + linksHtml;
+      }
+
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Demo data — 111 Swamp Rd
+    const DEMO_DATA = {
+      property: {
+        address: "111 Swamp Rd",
+        town: "Richmond",
+        state: "MA",
+        county: "Berkshire",
+        zip: "01254"
+      },
+      transaction: {
+        type: "sale",
+        date: "2000-08-11",
+        price: 274000,
+        deedNumber: "549232",
+        bookPage: "01760/119",
+        registry: "Middle Berkshire"
+      },
+      parties: {
+        buyer: { name: "SPRAGUE STEVEN & JUDITH" },
+        seller: { name: "FOSTER JOHN E & MARY L" },
+        titleCompany: { name: "Berkshire Title Services", licenseNumber: "TI-2000-0456" },
+        attorney: { name: "Robert Anderson, Esq.", barNumber: "MA-34567" },
+        lender: { name: "Lenox National Bank" }
+      },
+      documents: {
+        deed: {
+          type: "Quitclaim",
+          docNum: "549232",
+          bookPage: "01760/119",
+          fileDate: "2000-08-11",
+          grantors: ["FOSTER JOHN E", "FOSTER MARY L"],
+          grantees: ["SPRAGUE STEVEN", "SPRAGUE JUDITH"],
+          consideration: 274000,
+          tenancy: "Tenants by the Entireties"
+        },
+        chainOfTitle: [
+          { owner: "FOSTER JOHN E & MARY L", from: "1997-07-07", to: "2000-08-11", deedType: "Warranty Deed" },
+          { owner: "HARRINGTON JAMES T", from: "1985-03-15", to: "1997-07-07", deedType: "Warranty Deed" }
+        ],
+        titleSearch: {
+          searchDate: "2000-08-01",
+          searcher: "Berkshire Title Services",
+          yearsSearched: 50,
+          exceptions: [],
+          result: "Clear — no defects found"
+        },
+        settlementBuyer: {
+          purchasePrice: 274000,
+          downPayment: 54800,
+          loanAmount: 219200,
+          interestRate: 7.5,
+          closingCosts: 8500,
+          titleInsurance: 1650,
+          recordingFees: 225,
+          totalDueFromBuyer: 63300
+        },
+        settlementSeller: {
+          salePrice: 274000,
+          existingMortgagePayoff: 85000,
+          realEstateCommission: 16440,
+          transferTax: 1370,
+          recordingFees: 75,
+          netToSeller: 171115
+        },
+        wireBuyer: {
+          bank: "Lenox National Bank",
+          routingNumber: "211870281",
+          accountLast4: "4567",
+          amount: 63300,
+          date: "2000-08-11",
+          reference: "SPRAGUE-FOSTER-549232"
+        },
+        wireSeller: {
+          bank: "Greylock Federal Credit Union",
+          routingNumber: "211871919",
+          accountLast4: "8901",
+          amount: 171115,
+          date: "2000-08-11",
+          reference: "FOSTER-549232"
+        },
+        attestation: {
+          attorney: "Robert Anderson, Esq.",
+          barNumber: "MA-34567",
+          statement: "I have examined the title to 111 Swamp Rd, Richmond, MA and certify that the title is clear and marketable, subject to the standard exceptions noted in the title insurance commitment.",
+          date: "2000-08-11",
+          titleCompany: "Berkshire Title Services"
+        }
+      },
+      liens: {
+        active: [
+          {
+            type: "MORTGAGE",
+            amount: 219200,
+            lender: "Lenox National Bank",
+            bookPage: "01760/122",
+            date: "2000-08-11"
+          }
+        ],
+        discharged: []
+      },
+      confidenceScore: 0.87,
+      confidenceDetail: {
+        registryMatch: "EXACT",
+        assessorMatch: "FUZZY",
+        massGISMatch: "EXACT",
+        notes: "Assessor lists 109 Swamp Rd vs Registry 111 Swamp Rd — minor address discrepancy"
+      }
+    };
+  </script>
+</body>
+</html>

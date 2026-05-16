@@ -1,0 +1,14 @@
+{
+  "name": "origin-title-wallet",
+  "version": "1.0.0",
+  "description": "Origin Title Wallet — permanent encrypted records for real estate closings",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "keywords": ["title", "wallet", "real-estate", "closing", "mcp"],
+  "license": "UNLICENSED",
+  "private": true
+}

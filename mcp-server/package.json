@@ -1,0 +1,19 @@
+{
+  "name": "origin-land-records",
+  "version": "0.1.0",
+  "description": "Origin Land Records MCP Server — AI-readable property records for Massachusetts",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "better-sqlite3": "^11.10.0",
+    "jose": "^5.10.0",
+    "mcp-echarts": "^0.7.1",
+    "playwright": "^1.40.0",
+    "stripe": "^17.7.0"
+  }
+}

@@ -1,0 +1,198 @@
+<html>
+<head>
+  <title>Origin Title Records - AI-Readable Property Intelligence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 2em; margin: 30px 0 10px; }
+    h2 { font-size: 1.4em; margin: 30px 0 10px; color: #2d5016; border-bottom: 2px solid #2d5016; padding-bottom: 5px; }
+    h3 { font-size: 1.1em; margin: 20px 0 8px; }
+    p { margin: 8px 0; }
+    .hero { background: #f0f7e8; padding: 30px; border-radius: 12px; margin: 20px 0 30px; }
+    .hero h1 { margin-top: 0; }
+    .tagline { font-size: 1.2em; color: #555; }
+    .stat { display: inline-block; background: #2d5016; color: white; padding: 8px 16px; border-radius: 6px; margin: 4px; font-weight: bold; }
+    .demo-link { display: block; background: #fafafa; border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 10px 0; text-decoration: none; color: inherit; transition: all 0.2s; }
+    .demo-link:hover { background: #f0f7e8; border-color: #2d5016; }
+    .demo-link .url { font-family: monospace; font-size: 0.85em; color: #2d5016; word-break: break-all; }
+    .demo-link .desc { color: #666; font-size: 0.95em; margin-top: 4px; }
+    .demo-link .dtitle { font-weight: bold; font-size: 1.05em; }
+    .story { background: #f8f8f8; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #2d5016; }
+    .story .q { font-weight: bold; color: #2d5016; }
+    .story .a { color: #333; margin-top: 8px; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th { background: #2d5016; color: white; padding: 8px 12px; text-align: left; }
+    td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+    tr:hover { background: #f9f9f9; }
+    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #999; font-size: 0.85em; }
+    code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Origin Title Records</h1>
+  <p class="tagline">AI-readable, verified property intelligence for Massachusetts and Florida</p>
+  <p style="margin-top: 15px;">
+    <span class="stat">10 MA Properties</span>
+    <span class="stat">967K FL Parcels</span>
+    <span class="stat">9 MCP Tools</span>
+    <span class="stat">Live MassGIS API</span>
+  </p>
+</div>
+
+<h2>What Is This?</h2>
+<p>Origin Title Records assembles verified property data from multiple public sources &mdash; registries of deeds, county assessors, state GIS, FEMA flood maps &mdash; cross-references them, scores confidence, and makes everything queryable by AI agents or humans through simple API calls.</p>
+<p><strong>The problem:</strong> An AI asked about a property today gets "I'd recommend checking Zillow." That's not an answer &mdash; it's a homework assignment.</p>
+<p><strong>The solution:</strong> Ask Origin, get the complete verified record &mdash; chain of title, liens, assessed values, building details, fraud analysis &mdash; in one call.</p>
+
+<h2>Florida &mdash; Live Property Intelligence (Real-Time)</h2>
+<p>These endpoints query Miami-Dade County GIS, FEMA, and US Census <strong>in real-time</strong>. Every response includes SSL-attested provenance from government sources. Try ANY Miami-Dade address.</p>
+
+<a class="demo-link" href="/api/fl/search?address=7830+Atlantic+Way&city=Miami+Beach">
+  <div class="dtitle">Full Intelligence: 7830 Atlantic Way, Miami Beach (Luxury SFR)</div>
+  <div class="url">/api/fl/search?address=7830+Atlantic+Way&amp;city=Miami+Beach</div>
+  <div class="desc">Complete property intelligence assembled in real-time from 4 government sources: Miami-Dade GIS (property), FEMA (flood zone AE, BFE 8ft), Census (pop 489, median income $70K, 27% owner-occupied), plus 29 GIS overlay layers. Includes SSL certificate provenance chain and document hash.</div>
+</a>
+
+<a class="demo-link" href="/api/fl/search?address=905+Belle+Meade+Island+Dr&city=Miami">
+  <div class="dtitle">Full Intelligence: 905 Belle Meade Island Dr, Miami (Waterfront Estate)</div>
+  <div class="url">/api/fl/search?address=905+Belle+Meade+Island+Dr&amp;city=Miami</div>
+  <div class="desc">Waterfront luxury on Belle Meade Island &mdash; 7bd/7ba, 8,600 sqft, built 2025. Real-time flood zone, census demographics, and building details from government sources.</div>
+</a>
+
+<a class="demo-link" href="/api/fl/search?address=1226+Cordova+St&city=Coral+Gables">
+  <div class="dtitle">Full Intelligence: 1226 Cordova St, Coral Gables (Suburban Family Home)</div>
+  <div class="url">/api/fl/search?address=1226+Cordova+St&amp;city=Coral+Gables</div>
+  <div class="desc">Coral Gables family home &mdash; LLC-owned, 4bd/4ba, 4,127 sqft. Different neighborhood demographics, flood zone, and school assignments than Miami Beach.</div>
+</a>
+
+<a class="demo-link" href="/api/fl/lookup?address=1500+Collins&city=Miami+Beach">
+  <div class="dtitle">Quick Lookup: 1500 Collins Ave, Miami Beach (Hotel/Commercial)</div>
+  <div class="url">/api/fl/lookup?address=1500+Collins&amp;city=Miami+Beach</div>
+  <div class="desc">Fast property lookup from Miami-Dade GIS &mdash; returns owner, building details, classification. This address is a 115-room hotel (INVERAMA USA CORP).</div>
+</a>
+
+<a class="demo-link" href="/api/fl/flood?lat=25.7617&lng=-80.1918">
+  <div class="dtitle">Flood Zone: Downtown Miami (lat/lng query)</div>
+  <div class="url">/api/fl/flood?lat=25.7617&amp;lng=-80.1918</div>
+  <div class="desc">FEMA flood zone query by coordinates &mdash; returns zone, base flood elevation, insurance requirement. Works for any lat/lng in the US.</div>
+</a>
+
+<a class="demo-link" href="/api/fl/census?address=200+S+Biscayne+Blvd&city=Miami">
+  <div class="dtitle">Census Demographics: Downtown Miami</div>
+  <div class="url">/api/fl/census?address=200+S+Biscayne+Blvd&amp;city=Miami</div>
+  <div class="desc">Block-group level demographics from US Census ACS &mdash; population, income, home values, owner-occupancy rate, vacancy rate, commute patterns.</div>
+</a>
+
+<p style="background: #fff3cd; padding: 12px; border-radius: 6px; margin: 15px 0;"><strong>Coverage:</strong> 967,000+ Miami-Dade County properties available for instant lookup. FEMA flood data works nationwide. Census demographics cover all US addresses. Data sourced from authenticated government servers with SSL provenance.</p>
+
+<h2>Massachusetts &mdash; Deep Title Records</h2>
+<p>10 properties with full registry-of-deeds extraction (deed chains, mortgages, liens, fraud analysis). Plus live MassGIS assessor for any of 2.6M MA properties.</p>
+
+<h3>Property Search &amp; Assessor Data</h3>
+<a class="demo-link" href="/api/search?address=111+Swamp+Rd&town=Richmond">
+  <div class="dtitle">Search: 111 Swamp Rd, Richmond MA</div>
+  <div class="url">/api/search?address=111+Swamp+Rd&amp;town=Richmond</div>
+  <div class="desc">Full property record &mdash; 14 registry documents, 5 parcels totaling $2.57M assessed, deed chain from 1997. Includes live MassGIS assessor data.</div>
+</a>
+<a class="demo-link" href="/api/assessor?address=147+Reservoir+Rd&town=Lenox">
+  <div class="dtitle">Live Assessor: 147 Reservoir Rd, Lenox MA</div>
+  <div class="url">/api/assessor?address=147+Reservoir+Rd&amp;town=Lenox</div>
+  <div class="desc">Real-time query to Massachusetts state GIS &mdash; owner (Palmer Jonathan), $1.48M assessed, 4,101 sqft contemporary, sold $937,500 in 2012. Works for ANY of 2.6 million MA properties.</div>
+</a>
+
+<h3>Title Analysis</h3>
+<a class="demo-link" href="/api/chain?address=15+Shetland+Dr&town=Pittsfield">
+  <div class="dtitle">Chain of Title: 15 Shetland Dr, Pittsfield MA</div>
+  <div class="url">/api/chain?address=15+Shetland+Dr&amp;town=Pittsfield</div>
+  <div class="desc">Ownership history &mdash; Kester sold to Connolly ($173K, 1998), Connolly married Turner and added husband to deed ($0, 1999). The AI explains the name change.</div>
+</a>
+<a class="demo-link" href="/api/liens?address=291+North+Plain+Rd&town=Great+Barrington">
+  <div class="dtitle">Lien Check: 291 North Plain Rd, Great Barrington MA</div>
+  <div class="url">/api/liens?address=291+North+Plain+Rd&amp;town=Great+Barrington</div>
+  <div class="desc">The troubled title &mdash; 3 tax takings (all redeemed), 4 execution judgments (funeral home $8,674, oil company $4,214, garage $633), mortgage discharged. Active vs. resolved with cross-references.</div>
+</a>
+
+<h3>Fraud Detection</h3>
+<a class="demo-link" href="/api/fraud?address=291+North+Plain+Rd&town=Great+Barrington">
+  <div class="dtitle">Fraud Analysis: 291 North Plain Rd (Risk: MEDIUM)</div>
+  <div class="url">/api/fraud?address=291+North+Plain+Rd&amp;town=Great+Barrington</div>
+  <div class="desc">Automated pattern detection &mdash; flags orphan deeds, repeated tax takings, $13,520 in execution judgments, financial distress indicators. A title examiner would spend 4 hours finding this. Origin finds it instantly.</div>
+</a>
+<a class="demo-link" href="/api/party?name=SPRAGUE">
+  <div class="dtitle">Cross-Party Search: "SPRAGUE"</div>
+  <div class="url">/api/party?name=SPRAGUE</div>
+  <div class="desc">Search across ALL properties for a person. Finds 5 name variants across 2 properties with 57 appearances. This is how you catch scammers operating across multiple properties &mdash; no single title search reveals the pattern.</div>
+</a>
+<a class="demo-link" href="/api/party?name=PITTSFIELD+COOPERATIVE">
+  <div class="dtitle">Lender Portfolio: "PITTSFIELD COOPERATIVE BANK"</div>
+  <div class="url">/api/party?name=PITTSFIELD+COOPERATIVE</div>
+  <div class="desc">Every property where a lender appears &mdash; portfolio analysis across all cached records.</div>
+</a>
+
+<h3>Document Lookup</h3>
+<a class="demo-link" href="/api/document?bookPage=01760/119">
+  <div class="dtitle">Document: Book 1760 / Page 119</div>
+  <div class="url">/api/document?bookPage=01760/119</div>
+  <div class="desc">Retrieve a specific recorded document &mdash; the 2000 deed from Foster to Sprague for $274,000 with all parties and cross-references to 3 Instruments of Taking (2023).</div>
+</a>
+
+<h2>What An AI Can Do With This Data</h2>
+
+<div class="story">
+  <div class="q">Buyer: "Tell me about 15 Shetland Dr. We have two kids."</div>
+  <div class="a">AI reads the Origin data: "This is a 2,533 sqft ranch built in 1963, assessed at $447,800. The Turners have owned it since 1999. One active $90K mortgage, homestead filed March 2026. Clean title, no liens, no judgments. Confidence score: 0.95. Nearest school data and flood zone available in the full intelligence package."</div>
+</div>
+
+<div class="story">
+  <div class="q">Agent: "What's the story on 291 North Plain Rd?"</div>
+  <div class="a">AI flags: "Troubled title. Cooks bought for $167K in 1996. David Cook died ~2006. Since then: 3 tax takings, judgment creditors include a funeral home ($8,674) and an oil company ($4,214). Marie Ann transferred to herself + new husband in 2019 for $0. All liens appear resolved but verify executions were satisfied. Risk: MEDIUM."</div>
+</div>
+
+<div class="story">
+  <div class="q">Investor: "Show me everyone named COOK MARIE in the system."</div>
+  <div class="a">AI searches cross-property: "Found 3 name variants (COOK MARIE, COOK MARIE A, COOK MARIE ANN) with 19 appearances on 1 property. 4 execution judgments totaling $13,520. Multiple tax takings. Pattern: chronic financial distress, not fraud &mdash; but the property is a potential acquisition target at $457K assessed with no active mortgage."</div>
+</div>
+
+<div class="story">
+  <div class="q">Title Company: "Has anyone already verified this property?"</div>
+  <div class="a">AI checks: "Yes &mdash; 15 Shetland Dr has an Origin record with 11 registry documents, assessor data, and confidence 0.95. Last verified April 2026. Chain complete from 1998. You only need to check new filings since last verification."</div>
+</div>
+
+<h2>Data Sources</h2>
+<table>
+  <tr><th>Source</th><th>Data</th><th>Coverage</th><th>Cost</th></tr>
+  <tr><td>MA Registry of Deeds</td><td>Deeds, mortgages, liens, title chain</td><td>10 properties (deep)</td><td>Free</td></tr>
+  <tr><td>MassGIS (live API)</td><td>Assessed value, owner, building details</td><td>2.6 million MA properties</td><td>Free</td></tr>
+  <tr><td>Miami-Dade GIS</td><td>Owner, building, lot, zoning</td><td>967,000 FL parcels</td><td>Free</td></tr>
+  <tr><td>FEMA NFHL</td><td>Flood zones, base flood elevation</td><td>Nationwide</td><td>Free</td></tr>
+  <tr><td>US Census ACS</td><td>Demographics, income, housing</td><td>Nationwide</td><td>Free</td></tr>
+  <tr><td>Origin cross-reference</td><td>Confidence scores, fraud detection</td><td>All cached properties</td><td>Our value-add</td></tr>
+</table>
+
+<h2>MCP Tools for AI Agents</h2>
+<p>This server speaks <strong>Model Context Protocol (MCP)</strong>. Any AI agent can connect and use these 9 tools:</p>
+<table>
+  <tr><th>Tool</th><th>What It Does</th></tr>
+  <tr><td><code>search_property</code></td><td>Full property lookup &mdash; registry + assessor + confidence score</td></tr>
+  <tr><td><code>get_chain_of_title</code></td><td>Who owned it, when, for how much &mdash; complete history</td></tr>
+  <tr><td><code>check_liens</code></td><td>Active vs. resolved mortgages, tax liens, executions</td></tr>
+  <tr><td><code>get_document</code></td><td>Specific document by book/page reference</td></tr>
+  <tr><td><code>get_assessor_data</code></td><td>Live MassGIS query &mdash; any MA property in real-time</td></tr>
+  <tr><td><code>search_by_party</code></td><td>Cross-property search for fraud patterns</td></tr>
+  <tr><td><code>detect_fraud_patterns</code></td><td>Automated risk scoring with 7 detection rules</td></tr>
+  <tr><td><code>search_by_notary</code></td><td>Find documents across properties by notary name</td></tr>
+  <tr><td><code>list_properties</code></td><td>All properties in the Origin cache</td></tr>
+</table>
+
+<div class="footer">
+  <p><strong>Origin Title Records v0.1</strong> &mdash; Built by <a href="https://rootz.global">Rootz Corp</a></p>
+  <p>DBA: <code>eth:0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664</code></p>
+  <p>Contact: steven@rootz.global</p>
+  <p>Data: Massachusetts Registry of Deeds, MassGIS, Miami-Dade County GIS, FEMA, US Census Bureau</p>
+</div>
+
+</body>
+</html>
