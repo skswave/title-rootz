@@ -1,0 +1,29 @@
+{
+  "name": "title-rootz",
+  "version": "2.0.0",
+  "description": "Rootz Property Intelligence — AI-powered real estate farming platform",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/server.js",
+    "harvest": "node ingest/harvester.js",
+    "harvest:test": "node ingest/harvester.js --recipe fl-permits-miami-dade --test",
+    "harvest:status": "node ingest/harvester.js --status"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "better-sqlite3": "^11.10.0",
+    "jose": "^5.10.0",
+    "stripe": "^17.7.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skswave/title-rootz.git"
+  }
+}

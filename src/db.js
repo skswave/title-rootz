@@ -135,6 +135,19 @@ db.exec(`
   );
   CREATE INDEX IF NOT EXISTS idx_usage_account ON usage_log(account_id);
   CREATE INDEX IF NOT EXISTS idx_usage_time ON usage_log(created_at);
+
+  CREATE TABLE IF NOT EXISTS intelligence_cache (
+    property_key TEXT PRIMARY KEY,
+    data_hash TEXT NOT NULL,
+    template_summary TEXT,
+    ai_summary TEXT,
+    ai_model TEXT,
+    farming_score INTEGER,
+    generated_at TEXT DEFAULT (datetime('now')),
+    accessed_count INTEGER DEFAULT 0,
+    last_accessed TEXT
+  );
+  CREATE INDEX IF NOT EXISTS idx_cache_hash ON intelligence_cache(data_hash);
 `);
 
 console.log('  DB: title-accounts.db initialized (8 tables)');
