@@ -83,6 +83,22 @@ export async function getCensusData(address, city, state = 'FL', zip = '') {
   const lat = match.coordinates.y;
   const lng = match.coordinates.x;
 
+  // Try cached statewide Census data first ($0, instant)
+  const cached = lookupStatwideCensus(tract, blockGroup, county);
+  if (cached && cached.medianHouseholdIncome) {
+    return {
+      coordinates: { lat, lng },
+      tract, blockGroup, county, state: stateCode,
+      congressionalDistrict: congressData?.BASENAME || congressData?.NAME || null,
+      stateSenate: senateData?.BASENAME || senateData?.NAME || null,
+      stateHouse: houseData?.BASENAME || houseData?.NAME || null,
+      ...cached,
+      ownerOccupiedRate: cached.occupiedHousing > 0 ? Math.round((cached.ownerOccupied / cached.occupiedHousing) * 100) : null,
+      source: 'US Census ACS 2022 (statewide cached — instant)'
+    };
+  }
+
+  // Fallback: hit live ACS API
   const acsUrl = `${CENSUS_ACS}?get=B19013_001E,B01003_001E,B25077_001E,B25064_001E,B25003_001E,B25003_002E,B01002_001E,B19301_001E,B25002_001E,B25002_002E,B25002_003E&for=block%20group:${blockGroup}&in=state:${stateCode}+county:${county}+tract:${tract}`;
 
   const acsData = await fetchJSON(acsUrl);
@@ -109,7 +125,7 @@ export async function getCensusData(address, city, state = 'FL', zip = '') {
     vacantHousing: parseInt(values[10]) || null,
     ownerOccupied: ownerOcc,
     ownerOccupiedRate: occupied > 0 ? Math.round((ownerOcc / occupied) * 100) : null,
-    source: 'US Census ACS 2022 (Block Group level)',
+    source: 'US Census ACS 2022 (live API fallback)',
     sslCert: SSL_CERTS['api.census.gov']
   };
 }

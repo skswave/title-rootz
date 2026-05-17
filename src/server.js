@@ -191,11 +191,21 @@ async function handleRequest(req, res) {
       const parts = path_.slice(3).split('/');
       const addressSlug = decodeURIComponent(parts[0] || '');
       const city = decodeURIComponent(parts[1] || params.get('city') || '');
+      const state = (params.get('state') || 'FL').toUpperCase();
       const address = addressSlug.replace(/-/g, ' ').toUpperCase();
 
       if (!address) return json(res, { error: 'Address required' }, 400);
 
-      const data = await assemblePropertyIntelligence(address, city);
+      // State detection: OH cities or explicit state param
+      const OH_CITIES = ['COLUMBUS', 'CLEVELAND', 'CINCINNATI', 'DAYTON', 'AKRON', 'TOLEDO', 'CANTON', 'HAMILTON', 'SPRINGFIELD', 'DUBLIN', 'WESTERVILLE', 'GAHANNA', 'GROVE CITY', 'UPPER ARLINGTON', 'REYNOLDSBURG', 'HILLIARD'];
+      const isOhio = state === 'OH' || OH_CITIES.includes(city.toUpperCase());
+
+      let data;
+      if (isOhio) {
+        data = await assembleOhioPropertyIntelligence(address, city);
+      } else {
+        data = await assemblePropertyIntelligence(address, city);
+      }
       const page = await renderBridgePage(data, data.property?.folio);
       return html(res, page);
     }
