@@ -3,7 +3,7 @@
   "name": "Orlando Code Enforcement Cases",
   "transport": "socrata",
   "source": {
-    "endpoint": "https://data.cityoforlando.net/resource/5bts-6z5n.json",
+    "endpoint": "https://data.cityoforlando.net/resource/gkak-3r2m.json",
     "pagination": { "batchSize": 5000, "delay": 200 }
   },
   "transform": "permit-record",

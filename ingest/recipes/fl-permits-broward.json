@@ -3,7 +3,7 @@
   "name": "Broward County Building Permits",
   "transport": "arcgis",
   "source": {
-    "endpoint": "https://services1.arcgis.com/TjSxJMXrGMcYoH0h/arcgis/rest/services/Building_Permits/FeatureServer/0",
+    "endpoint": "https://gis.fortlauderdale.gov/arcgis/rest/services/BuildingPermitTracker/BuildingPermitTracker/MapServer/0",
     "pagination": { "method": "offset", "batchSize": 2000, "delay": 300 }
   },
   "transform": "permit-record",
