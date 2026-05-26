@@ -148,8 +148,23 @@ db.exec(`
     last_accessed TEXT
   );
   CREATE INDEX IF NOT EXISTS idx_cache_hash ON intelligence_cache(data_hash);
+
+  CREATE TABLE IF NOT EXISTS access_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    agent_type TEXT NOT NULL DEFAULT 'unknown',
+    agent_id TEXT,
+    endpoint TEXT NOT NULL,
+    query_params TEXT,
+    method TEXT DEFAULT 'GET',
+    status_code INTEGER DEFAULT 200,
+    ip_address TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+  CREATE INDEX IF NOT EXISTS idx_access_agent_type ON access_log(agent_type);
+  CREATE INDEX IF NOT EXISTS idx_access_time ON access_log(created_at);
+  CREATE INDEX IF NOT EXISTS idx_access_endpoint ON access_log(endpoint);
 `);
 
-console.log('  DB: title-accounts.db initialized (8 tables)');
+console.log('  DB: title-accounts.db initialized (9 tables)');
 
 export default db;
