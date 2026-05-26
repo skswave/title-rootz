@@ -519,6 +519,11 @@ async function handleRequest(req, res) {
       });
     }
 
+    if (path_ === '/googlead5922a13359c897.html') {
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      return res.end('google-site-verification: googlead5922a13359c897.html');
+    }
+
     if (path_ === '/robots.txt') {
       logAccess(req, '/robots.txt', 200);
       res.writeHead(200, { 'Content-Type': 'text/plain' });
