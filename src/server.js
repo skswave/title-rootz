@@ -524,6 +524,33 @@ async function handleRequest(req, res) {
       return res.end('google-site-verification: googlead5922a13359c897.html');
     }
 
+    if (path_ === '/.well-known/ai-plugin.json') {
+      logAccess(req, '/.well-known/ai-plugin.json', 200);
+      return json(res, {
+        schema_version: 'v1',
+        name_for_human: 'Rootz Property Intelligence',
+        name_for_model: 'rootz_property_intelligence',
+        description_for_human: 'Look up property data for 10.8M Florida and 1.2M Ohio parcels — owner info, farming scores, courthouse records (foreclosure, probate, liens), FEMA flood zones, building permits, schools, census demographics, and market economics. All from government source data with cryptographic provenance.',
+        description_for_model: 'Access AI-readable property intelligence for 12M parcels across Florida (all 67 counties) and Ohio (3 counties). Use this plugin to get property owner details, assessed values, farming/distress scores (0-100 based on courthouse signals like foreclosure, probate, liens, death records), FEMA flood zones, building permits, nearest schools with ratings, census demographics, and FRED market economics. Farming search returns scored prospects for real estate agents. Every response includes government source provenance. No API key required.',
+        auth: { type: 'none' },
+        api: { type: 'openapi', url: 'https://title.rootz.global/api/openapi.json', is_user_authenticated: false },
+        logo_url: 'https://origin.rootz.global/static/img/rootz-logo.svg',
+        contact_email: 'discover@rootz.global',
+        legal_info_url: 'https://title.rootz.global/pricing',
+      });
+    }
+
+    if (path_ === '/api/openapi.json') {
+      logAccess(req, '/api/openapi.json', 200);
+      const specPath = path.join(__dirname, '..', 'mcp-server', 'openapi.json');
+      if (fs.existsSync(specPath)) {
+        const spec = fs.readFileSync(specPath, 'utf-8');
+        res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        return res.end(spec);
+      }
+      return json(res, { error: 'OpenAPI spec not found' }, 404);
+    }
+
     if (path_ === '/robots.txt') {
       logAccess(req, '/robots.txt', 200);
       res.writeHead(200, { 'Content-Type': 'text/plain' });
