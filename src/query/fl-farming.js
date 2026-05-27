@@ -202,7 +202,7 @@ export function farmingSearch({ city, zip, lat, lng, radius = 1.0, signals = [],
     source: {
       parcels: 'FL Department of Revenue (statewide)',
       courtRecords: 'Broward County Clerk of Courts (SFTP bulk)',
-      coverage: '2024-2025 court filings + current DOR parcel data',
+      coverage: '2024-2026 court filings (daily SFTP) + current DOR parcel data',
       provenance: 'Government source data with cryptographic hashing'
     }
   };
