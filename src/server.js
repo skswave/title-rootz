@@ -229,13 +229,22 @@ async function handleRequest(req, res) {
     }
 
     // ─── Bridge Page ─────────────────────────────────
+    // Supports both: /p/farm?address=X&city=Y  and  /p/123-MAIN-ST/MIAMI
     if (path_.startsWith('/p/') && method === 'GET') {
       logAccess(req, '/p/', 200);
-      const parts = path_.slice(3).split('/');
-      const addressSlug = decodeURIComponent(parts[0] || '');
-      const city = decodeURIComponent(parts[1] || params.get('city') || '');
+
+      let address, city;
+      if (params.get('address')) {
+        // Query param format: /p/farm?address=X&city=Y or /p/?address=X&city=Y
+        address = params.get('address').toUpperCase();
+        city = (params.get('city') || '').toUpperCase();
+      } else {
+        // Slug format: /p/123-MAIN-ST/MIAMI
+        const parts = path_.slice(3).split('/');
+        address = decodeURIComponent(parts[0] || '').replace(/-/g, ' ').toUpperCase();
+        city = decodeURIComponent(parts[1] || '').toUpperCase();
+      }
       const state = (params.get('state') || 'FL').toUpperCase();
-      const address = addressSlug.replace(/-/g, ' ').toUpperCase();
 
       if (!address) return json(res, { error: 'Address required' }, 400);
 
